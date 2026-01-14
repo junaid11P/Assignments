@@ -5,37 +5,40 @@
 [![MongoDB](https://img.shields.io/badge/Database-MongoDB-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Video.js](https://img.shields.io/badge/Streaming-Video.js-0051BB?logo=videojs&logoColor=white)](https://videojs.com/)
 
-## 📄 Assignment Overview
-Build a web application that plays a livestream video from an RTSP source and allows users to create, manage, and display custom overlays on top of the video in real time.
+
+## Project Structure
+The project is divided into two main components:
+- **Backend:** Flask application serving a RESTful API and connecting to MongoDB.
+- **Frontend:** React application with a modern UI, Video.js integration, and interactive overlay management.
+
+```text
+rtsp-overlay-app/
+├── backend/
+│   ├── app.py             # Main Flask server
+│   ├── requirements.txt   # Python dependencies
+│   └── .env               # Environment variables
+└── frontend/
+    ├── src/
+    │   ├── components/    # Reusable UI components (VideoPlayer, Overlay)
+    │   ├── App.jsx        # Main application logic
+    │   ├── main.jsx       # Entry point with React 19 shim
+    │   └── index.css      # Custom styling & glassmorphism
+    ├── public/            # Static assets & HLS stream output
+    └── package.json       # Node.js dependencies
+```
 
 ---
 
-## ✅ Assignment Requirements Checklist
-
-- [x] **Landing Page:** Displays livestream video with a clear Play option.
-- [x] **RTSP Playback:** Supports user-provided RTSP URLs (via conversion).
-- [x] **Basic Controls:** Play, Pause, and Volume controls via Video.js.
-- [x] **Overlay Functionality:**
-    - [x] Text overlays.
-    - [x] Image/Logo overlays (via URL).
-    - [x] Freely movable (drag-and-drop).
-    - [x] Fully resizable.
-    - [x] Real-time updates and visibility.
-- [x] **CRUD APIs:** Full backend support for Create, Read, Update, and Delete operations.
-- [x] **Technology Stack:** Python (Flask), MongoDB, React.
-
----
-
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Prerequisites
-- **Node.js** (v18+)
-- **Python** (v3.9+)
-- **MongoDB** (Local instance or Atlas)
-- **FFmpeg** (Recommended for RTSP conversion)
+- **Node.js** (v18 or higher)
+- **Python** (v3.9 or higher)
+- **MongoDB** (Local instance or MongoDB Atlas)
+- **FFmpeg** (Required for converting RTSP to browser-compatible HLS)
 
-### 2. Backend Setup (Flask & MongoDB)
-1. Navigate to the backend folder:
+### 2. Backend Setup
+1. Navigate to the `backend` folder:
    ```bash
    cd backend
    ```
@@ -48,18 +51,14 @@ Build a web application that plays a livestream video from an RTSP source and al
    ```bash
    pip install -r requirements.txt
    ```
-4. Configure `.env`:
-   ```env
-   MONGO_URI=mongodb://localhost:27017/rtsp_overlay_db
-   PORT=5000
-   ```
-5. Run the server:
+4. Run the server:
    ```bash
    python app.py
    ```
+   The backend will start on `http://localhost:5000`.
 
-### 3. Frontend Setup (React & Vite)
-1. Navigate to the frontend folder:
+### 3. Frontend Setup
+1. Navigate to the `frontend` folder:
    ```bash
    cd frontend
    ```
@@ -67,7 +66,7 @@ Build a web application that plays a livestream video from an RTSP source and al
    ```bash
    npm install
    ```
-3. Start the application:
+3. Start the development server:
    ```bash
    npm run dev
    ```
@@ -75,28 +74,41 @@ Build a web application that plays a livestream video from an RTSP source and al
 
 ---
 
-## 📹 Livestream Management
+## Livestream & RTSP Configuration
 
-### How to Play RTSP Streams
-Since web browsers cannot play RTSP directly, we use **FFmpeg** to convert the stream into **HLS (m3u8)** in real-time.
+### How to Provide or Change RTSP URL
+Web browsers do not support the RTSP protocol natively. To view a livestream, you must convert the RTSP stream into **HLS (m3u8)** format using FFmpeg.
 
-1. **RTSP Source:** Obtain your RTSP URL (e.g., from an IP camera or RTSP.me).
-2. **Start Conversion:** Run this command in your terminal:
+1. **Obtain RTSP URL:** Get your stream URL (e.g., `rtsp://admin:password@192.168.1.10:554/stream`).
+2. **Convert to HLS:** Run the following command in a new terminal window:
    ```bash
-   ffmpeg -i "rtsp://YOUR_RTSP_URL" -codec:v copy -codec:a copy -f hls -hls_time 2 -hls_list_size 3 -hls_flags delete_segments frontend/public/stream.m3u8
+   ffmpeg -i "YOUR_RTSP_URL" -codec:v copy -codec:a copy -f hls -hls_time 2 -hls_list_size 3 -hls_flags delete_segments frontend/public/stream.m3u8
    ```
-3. **Load in App:** In the "RTSP Stream Master" top bar, enter: `http://localhost:5173/stream.m3u8` and click **Load Stream**.
+   *Note: For testing without a camera, you can use any video file or a public stream as the input.*
+3. **Load in App:** In the application top bar, enter `http://localhost:5173/stream.m3u8` and click **Load Stream**.
 
 ---
 
-## 🛠 CRUD API Documentation
+## CRUD API Documentation
 
-**Base URL:** `http://localhost:5000/api`
+**Base API URL:** `http://localhost:5000/api`
 
-### 1. Fetch All Overlays
+### 1. Fetch Overlays
 - **Endpoint:** `/overlays`
 - **Method:** `GET`
-- **Response:** Array of overlay objects.
+- **Description:** Returns a list of all saved overlays.
+- **Example Response:**
+  ```json
+  [
+    {
+      "_id": "64f1...",
+      "type": "text",
+      "content": "Cam 01 - Main Entrance",
+      "position": {"x": 50, "y": 50},
+      "size": {"width": 200, "height": 40}
+    }
+  ]
+  ```
 
 ### 2. Create Overlay
 - **Endpoint:** `/overlays`
@@ -104,17 +116,18 @@ Since web browsers cannot play RTSP directly, we use **FFmpeg** to convert the s
 - **Body:**
   ```json
   {
-    "type": "text",
-    "content": "Live Display",
-    "position": {"x": 50, "y": 50},
-    "size": {"width": 150, "height": 50}
+    "type": "image",
+    "content": "https://example.com/logo.png",
+    "position": {"x": 100, "y": 100},
+    "size": {"width": 100, "height": 100}
   }
   ```
 
 ### 3. Update Overlay
 - **Endpoint:** `/overlays/<overlay_id>`
 - **Method:** `PUT`
-- **Body:** `{ "position": {"x": 200, "y": 100} }`
+- **Description:** Updates position, size, or content.
+- **Body:** `{ "position": {"x": 150, "y": 80} }`
 
 ### 4. Delete Overlay
 - **Endpoint:** `/overlays/<overlay_id>`
@@ -122,34 +135,26 @@ Since web browsers cannot play RTSP directly, we use **FFmpeg** to convert the s
 
 ---
 
-## 📖 User Guide
+## User Guide
 
-### 🎬 Livestream Playback
-1. Paste your HLS/MP4 link in the top input.
-2. Click **Load Stream**.
-3. Use the Video.js controls (Play/Pause/Speaker) to manage playback.
+### Livestream Playback
+1. **Source:** Paste your HLS (`.m3u8`) or MP4 URL in the stream path input.
+2. **Action:** Click **Load Stream**.
+3. **Controls:** Use the integrated Video.js bar to play, pause, or adjust volume.
 
-### 🖼 Managing Overlays
-1. **Add:** Use the "Add New Overlay" section below the video. Select "Text" or "Image URL".
-2. **Move:** Click and drag any overlay on the video.
-3. **Resize:** Drag the **blue handle** in the bottom-right corner of an overlay.
-4. **Delete:** Click the red trash icon above an overlay.
-5. **Auto-Save:** All movements and size changes are instantly persisted to the database.
-
----
-
-## 📬 Submission Details
-
-- **To:** rakesh@gonote.ai
-- **CC:** safiya@gonote.ai, aman@gonote.ai
-- **Deliverables:** GitHub Repo Link, Demo Video (Mandatory).
+### Managing Overlays
+1. **Add:** In the "Add New Overlay" section, choose **Text** (for labels) or **Image URL** (for logos).
+2. **Positioning:** Click and drag any overlay to move it anywhere within the video frame.
+3. **Resizing:** Grab the **blue handle** at the bottom-right corner of an overlay to adjust its dimensions.
+4. **Removal:** Click the red trash icon on the overlay to permanently delete it.
+5. **Auto-Save:** Every change to an overlay (repositioning or resizing) is automatically saved to the database.
 
 ---
 
-## 🛠 Troubleshooting
-- **CORS Errors:** Ensure the Flask backend is running and `flask-cors` is configured (Default in `app.py`).
-- **Video Not Loading:** Check if your HLS segments are being generated in the `frontend/public/` folder.
-- **Resize Handle Missing:** Ensure `index.css` is loaded to see the custom-styled Draggable/Resizable handles.
+## Troubleshooting
+- **Video Not Loading:** Ensure FFmpeg is running and generating `.ts` segments in `frontend/public/`.
+- **Database Connection:** Verify MongoDB is running on `mongodb://localhost:27017/`.
+- **Styling:** If overlays don't look right, ensure `index.css` is correctly imported in `main.jsx`.
 
 ---
-*Created by [Your Name/GitHub Profile] for the GoNote.ai Assessment 2026*
+*Created by Juned*

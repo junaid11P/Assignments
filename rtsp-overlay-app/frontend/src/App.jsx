@@ -97,24 +97,6 @@ function App() {
       <div className="container mx-auto px-4 mb-6 flex flex-wrap gap-2 items-center">
         <span className="text-sm text-slate-400 mr-2">Quick Templates:</span>
         <button
-          onClick={() => setTempUrl('rtsp://admin:pass@8.8.8.8:554/Streaming/Channels/101')}
-          className="bg-white/5 border border-white/10 px-3 py-1 rounded text-xs hover:bg-white/10 transition-colors"
-        >
-          Hikvision
-        </button>
-        <button
-          onClick={() => setTempUrl('rtsp://admin:pass@8.8.8.8:554/cam/realmonitor?channel=1&subtype=0')}
-          className="bg-white/5 border border-white/10 px-3 py-1 rounded text-xs hover:bg-white/10 transition-colors"
-        >
-          Dahua
-        </button>
-        <button
-          onClick={() => setTempUrl('rtsp://admin:pass@8.8.8.8:9784/cameras/0/streaming/main?audio=1')}
-          className="bg-white/5 border border-white/10 px-3 py-1 rounded text-xs hover:bg-white/10 transition-colors"
-        >
-          MyVMS
-        </button>
-        <button
           onClick={() => setTempUrl('https://vjs.zencdn.net/v/oceans.mp4')}
           className="bg-white/5 border border-white/10 px-3 py-1 rounded text-xs hover:bg-white/10 transition-colors"
         >
