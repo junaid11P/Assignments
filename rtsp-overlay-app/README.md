@@ -138,7 +138,7 @@ Web browsers do not support the RTSP protocol natively. To view a livestream, yo
 ## User Guide
 
 ### Livestream Playback
-1. **Source:** Paste your HLS (`.m3u8`) or MP4 URL in the stream path input.
+1. **Source:** Paste your HLS (`.m3u8`) or MP4 URL in the stream path input.(eg: `http://localhost:5173/stream.m3u8` or 'https://vjs.zencdn.net/v/oceans.mp4' or 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4')
 2. **Action:** Click **Load Stream**.
 3. **Controls:** Use the integrated Video.js bar to play, pause, or adjust volume.
 
