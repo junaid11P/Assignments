@@ -24,28 +24,11 @@ body {
   overflow-x: hidden;
   font-family: 'Outfit', sans-serif;
   color: var(--text-primary);
-  background: #050505;
+  background: #000000;
   min-height: 100vh;
 }
 
-body {
-  background-image: url('/background.png');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  position: relative;
-}
 
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--background-overlay);
-  z-index: -1;
-}
 
 .glass-container {
   background: var(--glass-bg);
