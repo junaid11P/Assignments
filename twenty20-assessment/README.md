@@ -39,7 +39,5 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Deployment
 
-Refer to [DEPLOYMENT.md](./DEPLOYMENT.md) for step-by-step instructions on deploying to Vercel.
+[twenty20-assessment](https://twenty20-assessment.vercel.app/)
 
----
-Built by **Antigravity** for **Juned**.
