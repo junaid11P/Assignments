@@ -97,7 +97,7 @@ export default function PortfolioPage() {
                         <ul className="space-y-4 text-text-secondary">
                             <li className="flex items-center gap-3">
                                 <Mail size={18} className="text-primary" />
-                                <span>{user.email}</span>
+                                <span>junedjnr9632@gmail.com</span>
                             </li>
                             <li className="flex items-center gap-3">
                                 <MapPin size={18} className="text-primary" />
